@@ -1,3 +1,5 @@
+import produce from "immer"
+
 const initislState = {
   books: [
     {
@@ -52,19 +54,50 @@ const initislState = {
   selected: undefined
 };
 
-function reducer(state = initislState, action) {
+
+
+const reducer = produce((state, action) => {
   console.log(action);
   switch(action.type) {
     case 'BOOK_SELECT':
-      return{
-        books: state.books,
-        selected: action.payload
-      }
+      state.selected = action.payload;
+      break;
+    case "BOOK_LIKE":
+      state.books.forEach((book) => {
+        if (book.title === action.title) {
+          book.likes += 1;
+        }
+      });
+      break;
+      // const newBooks = state.books.map((book) => {
+      // if (book.title === action.title) {
+      //   book.likes += 1;
+      // }
+      // return book;
+      // });
+      // return {
+      //   selected: state.selected,
+      //   books: newBooks
+      // }
+      case "BOOK_ADD":
+        state.books.push({
+          title: `Book ${Math.floor(Math.random() * 1000)}`,
+          subtitle: `subtitle ${Math.floor(Math.random() * 1000)}`,
+          likes: 0
+      })
+      break;
+      // return {
+      //   books: state.books.concat({
+      //     title: `Book ${Math.floor(Math.random() * 1000)}`,
+      //     subtitle: `subtitle ${Math.floor(Math.random() * 1000)}`,
+      //     likes: 0
+      // }),
+      //   selected: state.selected
+      // }
     default:
-      return state;
+      break;
   }
-}
-
+}, initislState)
 
 
 export default reducer;

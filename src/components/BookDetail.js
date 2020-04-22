@@ -15,6 +15,8 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { connect } from 'react-redux';
 import Alert from '@material-ui/lab/Alert';
 
+import {likeBook} from '../actions';
+
 const useStyles = makeStyles((theme) => ({
   root: {
     // maxWidth: 345,
@@ -26,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function BookDetail({book}) {
+function BookDetail({book, likeBook}) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
   if (!book) {
@@ -41,12 +43,17 @@ function BookDetail({book}) {
         title={book.title}
         subheader={book.subtitle}
       />
-      <CardMedia
-        className={classes.media}
-        image={book.img}
-      />
+      {
+        book.img && (
+        <CardMedia
+          className={classes.media}
+          image={book.img}
+        />
+        )
+      }
       <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites">
+        <IconButton aria-label="add to favorites"
+        onClick={() => { likeBook(book)}}>
           <FavoriteIcon />
         </IconButton>
         <IconButton aria-label="share">
@@ -64,5 +71,5 @@ const mapStateToProps = (state /*, ownProps*/) => {
 }
 
 export default connect(
-  mapStateToProps
+  mapStateToProps, { likeBook }
 )(BookDetail)
